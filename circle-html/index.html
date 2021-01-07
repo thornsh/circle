@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../jquery-2.2.2.min.js"></script>
+</head>
+
+<body>
+  <div class="circle-bar">
+    <div class="circle-bar-left"></div>
+    <div class="circle-bar-right"></div>
+    <!-- 遮罩层，显示百分比 -->
+    <div class="mask">
+      <span class="percent" id="times">60%</span>
+    </div>
+  </div>
+</body>
+
+</html>
+
+<style>
+  .circle-bar {
+    font-size: 200px;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    background-color: #333;
+  }
+
+  .circle-bar-left,
+  .circle-bar-right {
+    width: 1em;
+    height: 1em;
+    background-color: #eee;
+  }
+
+  /*
+      这里采用clip剪切了圆，实现左右两个半圆，右半圆在后面，因此在更上一层，
+      clip的用法参考：http://www.w3school.com.cn/cssref/pr_pos_clip.asp
+    */
+  .circle-bar-right {
+    clip: rect(0, auto, auto, .5em);
+  }
+
+  .circle-bar-left {
+    clip: rect(0, .5em, auto, 0);
+  }
+
+  .mask {
+    width: 0.8em;
+    height: 0.8em;
+    background-color: #fff;
+    text-align: center;
+    line-height: 0.2em;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .mask :first-child {
+    font-size: 0.3em;
+    height: 0.8em;
+    line-height: 0.8em;
+    display: block;
+  }
+
+  /*所有的后代都水平垂直居中，这样就是同心圆了*/
+  .circle-bar * {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+
+  /*自身以及子元素都是圆*/
+  .circle-bar,
+  .circle-bar>* {
+    border-radius: 50%;
+  }
+</style>
+
+<script>
+  //   $(function(){
+  //     var percent = parseInt($('.mask :first-child').text());
+  //     var baseColor = $('.circle-bar').css('background-color');
+
+  //     if( percent<=50 ){
+  //         $('.circle-bar-right').css('transform','rotate('+(percent*3.6)+'deg)');
+  //     }else {
+  //         $('.circle-bar-right').css({
+  //             'transform':'rotate(0deg)',
+  //             'background-color':baseColor
+  //         });
+  //         $('.circle-bar-left').css('transform','rotate('+((percent-50)*3.6)+'deg)');
+  //     }
+  // })
+  $(function () {
+    var target = parseInt($('.mask :first-child').text()); // 最终值
+    console.log(target)
+    var percent = 0;
+    var duration = 3000; // 持续时间3秒
+    var interval = 1000; // 1秒绘制一次
+    var time = duration / interval; // 绘制次数
+    var count = 0;
+    //将percent用定时器慢慢增加到比如80%
+    var timer = setInterval(() => {
+      getDate();
+      percent = percent + target / time;
+      count++;
+      if (count === time) {
+        // clearInterval(timer);
+        draw(target);// 最后一次可能和80%不一致，加个判断，最后一次用target值即可
+      } else {
+        draw(percent);
+      }
+    }, interval);
+
+
+    function draw(percent) {
+
+      var baseColor = $('.circle-bar').css('background-color');
+
+      if (percent <= 50) {
+        $('.circle-bar-right').css('transform', 'rotate(' + (percent * 3.6) + 'deg)');
+      } else {
+        $('.circle-bar-right').css({
+          'transform': 'rotate(0deg)',
+          'background-color': baseColor
+        });
+        $('.circle-bar-left').css('transform', 'rotate(' + ((percent - 50) * 3.6) + 'deg)');
+      }
+    }
+
+    function getDate() {
+      //获取当前时间
+      var date = new Date();
+      //格式化为本地时间格式
+      var date1 = date.toLocaleString();
+      //获取div
+      var div1 = document.getElementById("times");
+      //将时间写入div
+      div1.innerHTML = date1;
+    }
+  })
+</script>
