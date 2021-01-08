@@ -12,7 +12,7 @@
     <div class="outbox"> </div>
 
     <svg class="svg">
-      <circle id="cls" class="cls run-anim" cx="130" cy="130" r="125"></circle>
+      <circle style="stroke-dashoffset: 800;" id="cls" class="cls run-anim" cx="130" cy="130" r="125"></circle>
     </svg>
 
     <div class="control">
@@ -41,6 +41,23 @@
   let total;
   let start = $('#start');
 
+  var ceshi;
+  getDate();
+  circle.style.strokeDashoffset = 800-(800*ceshi)/60;
+
+  console.log(circle.style.strokeDashoffset);
+  var timer = setInterval(()=>{
+    getDate();
+    circle.style.strokeDashoffset = 800-(800*ceshi)/60;
+  },1000)
+  // var timer = setInterval(() => {
+  //     getDate();
+  //     circle.style.strokeDashoffset = "800";
+  //     circle.style.animationDuration = ceshi + "s";
+  //     circle.style.animationPlayState = "running";
+      
+  //   }, 1000);
+
   start.click(() => {
     let minute = document.getElementById('min').value;
     let second = document.getElementById('sec').value;
@@ -63,6 +80,17 @@
       clearInterval(interval);
     }
   }
+
+  function getDate() {
+      //获取当前时间
+      var date = new Date();
+      //格式化为本地时间格式
+      //var date1 = date.toLocaleString();
+      var date1 = date.getMinutes();
+      var date2 = date.getHours();
+      var date3 = date.getSeconds();
+      ceshi = date3;
+    }
 </script>
 
 <style>
@@ -134,6 +162,7 @@
     stroke-dashoffset: 800;
     transform: rotate(270deg);
     transform-origin: 50% 50%;
+    transition: all 1s;
 
   }
 
