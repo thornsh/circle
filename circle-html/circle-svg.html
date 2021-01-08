@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="flex-container">
+    <div class="outbox"> </div>
+
+    <svg class="svg">
+      <circle id="cls" class="cls run-anim" cx="130" cy="130" r="125"></circle>
+    </svg>
+
+    <div class="control">
+      <div class="time">
+        <label for="min"> 分钟
+          <input id="min" type="number" min="0" max="59" placeholder="mm" value="1" />
+        </label>
+        <label for="sec"> 秒
+          <input id="sec" type="number" min="0" max="59" placeholder="ss" value="0" />
+        </label>
+      </div>
+      <div class="action">
+        <button id="start" class=""> 开始 </button>
+
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script>
+  let circle = document.getElementById('cls');
+  let total;
+  let start = $('#start');
+
+  start.click(() => {
+    let minute = document.getElementById('min').value;
+    let second = document.getElementById('sec').value;
+    // console.log("seconds:"+(minute*60)+"secs:"+second);
+    total = (parseInt(minute) * 60) + parseInt(second);
+    console.log("total:" + total);
+    circle.style.strokeDashoffset = "800";
+    circle.style.animationDuration = total + "s";
+    circle.style.animationPlayState = "running";
+    set(1000 * total);
+    circle.classList.add("run-anim");
+  });
+
+  function set(total) {
+    let interval = setInterval(ret, total);
+    function ret() {
+      confirm('Timer Completed! Press Reset');
+      circle.classList.remove("run-anim");
+      void circle.offsetWidth;
+      clearInterval(interval);
+    }
+  }
+</script>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font: 100% "Montserrat Light", serif;
+    height: 100vh;
+    width: 100%;
+    overflow: visible;
+  }
+
+  body {
+    height: inherit;
+    width: inherit;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+    width: inherit;
+    height: inherit;
+
+    background-image: linear-gradient(to top, #30cfd0 10%, #330867 100%);
+    color: #ffffff;
+  }
+
+  h1 {
+    padding: 24px 24px;
+  }
+
+  .outbox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: inherit;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    border: 10px inset rgba(1, 1, 1, 0.2);
+    width: 240px;
+    height: 240px;
+    border-radius: 100%;
+    margin-top: 100px;
+
+    /*    animation*/
+  }
+
+  .svg {
+    position: relative;
+    top: -260px;
+    width: 260px;
+    height: 260px;
+  }
+
+  .cls {
+    fill: none;
+    stroke: #000;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+    stroke-width: 10px;
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    transform: rotate(270deg);
+    transform-origin: 50% 50%;
+
+  }
+
+  .run-anim {
+    -webkit-animation-name: dash;
+    -moz-animation-name: dash;
+    -o-animation-name: dash;
+    animation-name: dash;
+    animation-duration: 0s;
+    animation-play-state: paused;
+    animation-fill-mode: none;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+  }
+
+  @keyframes dash {
+    0% {
+      stroke: #84ffc7;
+      stroke-dashoffset: 800;
+    }
+
+    100% {
+      stroke: #84ffc7;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .control {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    width: 400px;
+    height: 200px;
+    margin-top: -200px;
+  }
+
+  .time {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+
+  #sec,
+  #min {
+    all: unset;
+    width: 100px;
+    height: 50px;
+    background: rgba(1, 1, 1, 0.2);
+    border-radius: 25px;
+    font-size: 18pt;
+    text-align: center;
+    color: white;
+  }
+
+  .action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+
+  #start,
+  #reset {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #acdc51;
+    color: #330867;
+    font-weight: bolder;
+  }
+
+  #start:hover,
+  #reset:hover {
+    animation: ani 0.3s ease-out forwards;
+  }
+
+  @keyframes ani {
+    0% {
+      transform: scale(1, 1);
+    }
+
+    100% {
+      transform: scale(0.9, 0.9);
+    }
+  }
+</style>
